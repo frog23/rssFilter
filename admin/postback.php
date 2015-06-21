@@ -19,7 +19,8 @@
         if($feed->error()) {
             throw new InvalidArgumentException($feed->error());
         }
-        $db->insert("feeds", ["feed"=>$_REQUEST["feed"]]);
+        $hash = md5($_REQUEST["feed"].time().microtime());
+        $db->insert("feeds", ["feed"=>$_REQUEST["feed"], "hash"=>$hash]);
     }
 
     if($mode == "addAggregateFeed") {

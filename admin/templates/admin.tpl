@@ -14,7 +14,9 @@
     <br>
     {foreach $feeds as $feed}
         <hr>
+        {if $feed["hash"]}<a href="{$base_url}/index.php?hash={$feed["hash"]}">{$feed["feed"]}</a>{else}
         <a href="{$base_url}/index.php?id={$feed["ID"]}">{$feed["feed"]}</a>
+        {/if}
         <form method="post" action="postback.php">
             <input type="hidden" name="mode" value="setFeedProperties">
             <input type="hidden" name="feedID" value="{$feed["ID"]}">

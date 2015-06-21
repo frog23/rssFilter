@@ -1,26 +1,43 @@
-<?php 
-header('Content-type: application/atom+xml');
-echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-?>
-
-<feed xmlns="http://www.w3.org/2005/Atom">
 <?php
     $path = "./admin/";
     require_once($path."autoloader.php");
     require_once($path."functions.php");
     require_once($path."db/SQLiteManager.php");
 
+    $allowIds = true;
+    
     $id = $_REQUEST["id"];
-    if(!$id) {
-        die("no id");
+    $hash = $_REQUEST["hash"];
+    if(!$id && !$hash) {
+        if($allowIds){
+            die("no id or hash");
+        }else{
+            die("no hash");
+        }
     }
     $db = SQLiteManager\SQLiteManager::getInstance();
-
-    $result = $db->select("feeds", null, ["ID"=>$id]);
-    $feedInfo = $db->fetchArray($result)[0];
-    if(!$feedInfo) {
-        die("bad id ".$id);
+    $feedInfo = null;
+    
+    if($hash) {
+        $result = $db->select("feeds", null, ["hash"=>$hash]);
+        $feedInfo = $db->fetchArray($result)[0];
+        if(!$feedInfo) {
+            die("bad feed hash ".$hash);
+        }
+    }else if($id && !$hash && $allowIds) {
+        $result = $db->select("feeds", null, ["ID"=>$id]);
+        $feedInfo = $db->fetchArray($result)[0];
+        if(!$feedInfo) {
+            die("bad id ".$id);
+        }
+    }else if($id && !$hash && !$allowIds) {
+        if(!$feedInfo) {
+            die("requests via ids are not allowed");
+        }
+    }else{
     }
+    
+
     $result = $db->select("filters", null, ["feedID"=>$feedInfo["ID"]]);
     $feedInfo["patterns"] = $db->fetchArray($result);
 
@@ -30,6 +47,11 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
     $feed->init();
     // This makes sure that the content is sent to the browser as text/html and the UTF-8 character set (since we didn't change it).
     $feed->handle_content_type();
+?>
+<?php 
+header('Content-type: application/atom+xml');
+echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+echo "<feed xmlns=\"http://www.w3.org/2005/Atom\">";
 ?>
     <title><?= $feed->get_title(); ?></title>
     <?php 
