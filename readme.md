@@ -22,5 +22,9 @@ Hacking
 -------
 Don't see the field you want to filter by? Need something more complex? Check out the filter function in functions.php!
 
+Secure Settings
+---------------
+If you want to block other people from editing your feeds or resetting your database, you should turn on [HTTP Basic access authentication](https://en.wikipedia.org/wiki/Basic_access_authentication) or something similar.
+
 *****************
 See MIT.txt for licensing info

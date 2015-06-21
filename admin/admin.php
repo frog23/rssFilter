@@ -26,6 +26,6 @@
     $data->assign("fields", $fields);
     $data->assign("feeds", $feeds);
     $data->assign("aggregates", $aggregates);
-    $data->assign("base_url", "//".$_SERVER[HTTP_HOST].substr($_SERVER[REQUEST_URI],0,strrpos($_SERVER[REQUEST_URI],"/")));
+    $data->assign("base_url", "//".$_SERVER[HTTP_HOST].substr($_SERVER[REQUEST_URI],0,strrpos($_SERVER[REQUEST_URI],"/")-6));
     $smarty->display("admin.tpl", $data);
 ?>

@@ -1,5 +1,5 @@
 <?php
-    $path = "./";
+    $path = "./admin/";
     require_once($path."autoloader.php");
     require_once($path."functions.php");
     require_once($path."db/SQLiteManager.php");

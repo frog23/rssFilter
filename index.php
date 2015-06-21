@@ -5,7 +5,7 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 
 <feed xmlns="http://www.w3.org/2005/Atom">
 <?php
-    $path = "./";
+    $path = "./admin/";
     require_once($path."autoloader.php");
     require_once($path."functions.php");
     require_once($path."db/SQLiteManager.php");
