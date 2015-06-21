@@ -21,6 +21,7 @@
             <input type="hidden" name="mode" value="setFeedProperties">
             <input type="hidden" name="feedID" value="{$feed["ID"]}">
             Max Items: <input type="text" name="maxItems" value="{$feed["maxItems"]}">
+            <input type="checkbox" name="public"{if $feed["publicOrPrivate"] eq 'public'} checked="checked"{/if}> public feed 
             <br />
             <select name="blockOrPermit">
             <option value="block"{if $feed["blockOrPermit"] ne 'permit'} selected="selected"{/if}>Block</option>

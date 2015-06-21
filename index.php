@@ -9,11 +9,30 @@
     $id = $_REQUEST["id"];
     $hash = $_REQUEST["hash"];
     if(!$id && !$hash) {
-        if($allowIds){
-            die("no id or hash");
-        }else{
-            die("no hash");
-        }
+        $path = "./admin/";
+	require_once($path."smarty/Smarty.class.php");
+	require_once($path."db/SQLiteManager.php");
+
+	$db = SQLiteManager\SQLiteManager::getInstance();
+
+	$result = $db->select("feeds");
+	$feeds = $db->fetchArray($result);
+
+	//DISPLAY
+	$smarty = new Smarty();
+	$smarty->auto_literal = true;
+	$data = new Smarty_Data();
+	$data->assign("feeds", $feeds);
+	$data->assign("base_url", "//".$_SERVER[HTTP_HOST].substr($_SERVER[REQUEST_URI],0,strrpos($_SERVER[REQUEST_URI],"/")));
+	$smarty->addTemplateDir('admin/templates');
+	$smarty->display("index.tpl", $data);
+	return;
+	//TODO add default page with public feed list here
+        //if($allowIds){
+        //    die("no id or hash");
+        //}else{
+        //    die("no hash");
+        //}
     }
     $db = SQLiteManager\SQLiteManager::getInstance();
     $feedInfo = null;
@@ -22,16 +41,19 @@
         $result = $db->select("feeds", null, ["hash"=>$hash]);
         $feedInfo = $db->fetchArray($result)[0];
         if(!$feedInfo) {
+            http_response_code(404);
             die("bad feed hash ".$hash);
         }
     }else if($id && !$hash && $allowIds) {
         $result = $db->select("feeds", null, ["ID"=>$id]);
         $feedInfo = $db->fetchArray($result)[0];
         if(!$feedInfo) {
+            http_response_code(404);
             die("bad id ".$id);
         }
     }else if($id && !$hash && !$allowIds) {
         if(!$feedInfo) {
+            http_response_code(404);
             die("requests via ids are not allowed");
         }
     }else{

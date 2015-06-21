@@ -81,9 +81,14 @@
 	if($blockOrPermit != 'permit'){
 		$blockOrPermit = 'block';
 	}
+	$publicOrPrivate = "private";
+	if($_REQUEST["public"] == 'on'){
+		$publicOrPrivate = 'public';
+	}
         $db->update("feeds", ["maxItems"=>$_REQUEST["maxItems"]], ["ID"=>$_REQUEST["feedID"]]);
         $db->update("feeds", ["anyOrAll"=>$anyOrAll], ["ID"=>$_REQUEST["feedID"]]);
         $db->update("feeds", ["blockOrPermit"=>$blockOrPermit], ["ID"=>$_REQUEST["feedID"]]);
+        $db->update("feeds", ["publicOrPrivate"=>$publicOrPrivate], ["ID"=>$_REQUEST["feedID"]]);
     }
 
     header("location:admin.php");
